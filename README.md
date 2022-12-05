@@ -2,28 +2,56 @@
 
 Simple SEIRS model for C API for the FAIR data pipeline.
 
-To run locally, install [`cDataPipeline`](https://github.com/PlasmaFAIR/cDataPipeline)
-as follows:
+## Installation
+
+From the top-level directory:
 
 ```bash
-$ cd cDataPipeline
-$ cmake -B build
-& sudo cmake --build build --target install
-```
-
-Then, compile the simple model:
-
-```bash
-
-$ cd cDataPipelineSimpleModel
 $ cmake -B build
 $ cmake --build build
 ```
 
-Finally, run using the provided data:
+Building will be much faster if
+[`cDataPipeline`](https://github.com/PlasmaFAIR/cDataPipeline) has been installed
+on the user's system. Otherwise, `cDataPipeline` will be downloaded and built first.
+
+## Run locally
 
 ```bash
 $ ./build/bin/cSimpleModel data/local_data.csv
 ```
 
 The produced data can be found in a new directory called `data_store`.
+
+## Run using FAIR Data Pipeline
+
+
+First, install the [`fair` CLI](https://github.com/FAIRDataPipeline/FAIR-CLI).
+
+```bash
+$ pip install fair-cli
+```
+
+To set up the run, first start a local registry:
+
+```bash
+$ fair registry start
+```
+
+Note the URL on which the server is running, which should be something like
+`http://127.0.0.1:8000`. Then, initialise the repository:
+
+```
+$ fair init
+```
+
+The default inputs will work in most cases, but you may need to set the 'Remote API'
+using the URL reported by the previous command, i.e. `http://127.0.0.1:8000/api/`.
+You may also need to set the registry token, which should be at
+`/home/USERNAME/.fair/registry/token`, where `USERNAME` is your login name. Finally,
+run the model using:
+
+```
+$ fair pull data/config.yaml
+$ fair run data/config.yaml
+```

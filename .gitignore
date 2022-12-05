@@ -36,3 +36,6 @@ build/
 
 # Produced data
 data_store/
+
+# FDP stuff
+.fair

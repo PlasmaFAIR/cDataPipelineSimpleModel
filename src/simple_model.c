@@ -132,6 +132,14 @@ void run_fair(){
     fdp_log(csv_log_end, FDP_LOG_INFO);
 
     finalise_SEIRSModel(&model);
+
+    err = fdp_finalise();
+    if(err){
+        char err_string[512];
+        sprintf(err_string, "Error: fdp_finalise failed, error code %d", (int) err);
+        fdp_log(err_string, FDP_LOG_ERROR);
+        exit(EXIT_FAILURE);
+    }
 }
 
 int init_SEIRSModel(SEIRSModel* model, const char* input_path){

@@ -35,6 +35,7 @@ $ pip install fair-cli
 To set up the run, first start a local registry:
 
 ```bash
+$ fair registry install
 $ fair registry start
 ```
 

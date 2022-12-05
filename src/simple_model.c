@@ -75,6 +75,7 @@ void run_fair(){
     //fdp_log(script_path_log, FDP_LOG_INFO);
 
     // Init FAIR datapipeline
+    puts("FDP INIT");
     FDP_ERR_T err;
     err = fdp_init(config_path, script_path, token);
     if(err){
@@ -86,6 +87,7 @@ void run_fair(){
 
     // Get/link IO paths
     char input_path[512];
+    puts("FDP LINK READ");
     err = fdp_link_read("SEIRS_model/parameters", input_path);
     if(err){
         char err_string[512];
@@ -94,6 +96,7 @@ void run_fair(){
         exit(EXIT_FAILURE);
     }
 
+    puts("FDP LINK WRITE");
     char output_path[512];
     err = fdp_link_write("SEIRS_model/results/model_output/c", output_path);
     if(err){
@@ -102,12 +105,14 @@ void run_fair(){
         //fdp_log(err_string, FDP_LOG_ERROR);
         exit(EXIT_FAILURE);
     }
+    puts("Output path:");
     puts(output_path);
 
     // Run model
     SEIRSModel model;
 
 
+    puts("Running Model");
     //fdp_log("Initialising SEIRS model", FDP_LOG_INFO);
     err = init_SEIRSModel(&model, input_path);
     if(err){

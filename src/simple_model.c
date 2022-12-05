@@ -82,6 +82,7 @@ void run_fair(){
     puts(script_path);
     FDP_ERR_T err;
     err = fdp_init(config_path, script_path, token);
+    puts("FDP INIT FINISHED");
     if(err){
         char err_string[512];
         sprintf(err_string, "Error: fdp_init failed, error code %d", (int) err);

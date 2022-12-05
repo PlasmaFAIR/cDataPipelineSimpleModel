@@ -76,6 +76,10 @@ void run_fair(){
 
     // Init FAIR datapipeline
     puts("FDP INIT");
+    puts("FDP CONFIG PATH:");
+    puts(config_path);
+    puts("FDP SCRIPT PATH:");
+    puts(script_path);
     FDP_ERR_T err;
     err = fdp_init(config_path, script_path, token);
     if(err){

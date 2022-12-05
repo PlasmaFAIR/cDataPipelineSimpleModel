@@ -11,15 +11,15 @@ include(FetchContent)
 
 add_executable(cSimpleModel ./include/cSimpleModel/simple_model.h ./src/simple_model.c)
 
-
-# TODO prefer find_package, otherwise use fetchcontent
-#FetchContent_Declare(
-#    cDataPipeline
-#    GIT_REPOSITORY https://github.com/PlasmaFAIR/cDataPipeline.git
-#    GIT_TAG main
-#)
-#FetchContent_MakeAvailable(cDataPipeline)
-find_package(cDataPipeline)
+find_package(cDataPipeline QUIET)
+if(NOT cDataPipeline_FOUND)
+    FetchContent_Declare(
+        cDataPipeline
+        GIT_REPOSITORY https://github.com/PlasmaFAIR/cDataPipeline.git
+        GIT_TAG main
+    )
+    FetchContent_MakeAvailable(cDataPipeline)
+endif()
 
 target_include_directories(
     cSimpleModel

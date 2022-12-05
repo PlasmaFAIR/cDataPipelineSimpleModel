@@ -80,6 +80,8 @@ void run_fair(){
     puts(config_path);
     puts("FDP SCRIPT PATH:");
     puts(script_path);
+    puts("FDP TOKEN:");
+    puts(token);
     FDP_ERR_T err;
     err = fdp_init(config_path, script_path, token);
     puts("FDP INIT FINISHED");

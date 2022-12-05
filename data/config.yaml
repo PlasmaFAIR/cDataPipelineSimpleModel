@@ -3,7 +3,7 @@ run_metadata:
   default_output_namespace: testing
   description: SEIRS Model C
   script: ./build/cSimpleModel
-  remote_repo: https://github.com/PlasmaFAIR/cSimpleModel.git
+  remote_repo: https://github.com/PlasmaFAIR/cDataPipelineSimpleModel.git
 
 register:
 - namespace: PSU

@@ -23,7 +23,7 @@ register:
   primary: True
 
 write:
-- data_product: SEIRS_model/results/model_output/c_results
+- data_product: SEIRS_model/results/model_output/c
   description: SEIRS model results
   file_type: csv
 

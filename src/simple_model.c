@@ -96,7 +96,7 @@ void run_fair(){
     }
 
     char output_path[512];
-    err = fdp_link_write("SEIRS_model/results/model_output/c_results", output_path);
+    err = fdp_link_write("SEIRS_model/results/model_output/c", output_path);
     if(err){
         char err_string[512];
         sprintf(err_string, "Error: fdp_link_write failed, error code %d", (int) err);

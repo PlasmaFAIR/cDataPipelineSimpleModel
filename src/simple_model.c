@@ -102,6 +102,7 @@ void run_fair(){
         //fdp_log(err_string, FDP_LOG_ERROR);
         exit(EXIT_FAILURE);
     }
+    puts(output_path);
 
     // Run model
     SEIRSModel model;

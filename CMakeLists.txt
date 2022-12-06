@@ -12,7 +12,7 @@ include(FetchContent)
 add_executable(cSimpleModel ./include/cSimpleModel/simple_model.h ./src/simple_model.c)
 
 find_package(cDataPipeline QUIET)
-if(NOT cDataPipeline_FOUND)
+if(NOT TARGET cDataPipeline::cDataPipeline)
     FetchContent_Declare(
         cDataPipeline
         GIT_REPOSITORY https://github.com/PlasmaFAIR/cDataPipeline.git

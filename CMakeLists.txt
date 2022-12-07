@@ -11,8 +11,8 @@ include(FetchContent)
 
 add_executable(cSimpleModel ./include/cSimpleModel/simple_model.h ./src/simple_model.c)
 
-find_package(cDataPipeline QUIET)
-if(NOT TARGET cDataPipeline::cDataPipeline)
+find_package(fdpapi QUIET)
+if(NOT TARGET fdpapi::fdpapic)
     FetchContent_Declare(
         cDataPipeline
         GIT_REPOSITORY https://github.com/PlasmaFAIR/cDataPipeline.git
@@ -27,4 +27,4 @@ target_include_directories(
     $<BUILD_INTERFACE:${cSimpleModel_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
-target_link_libraries(cSimpleModel cDataPipeline::cDataPipeline)
+target_link_libraries(cSimpleModel fdpapi::fdpapic)

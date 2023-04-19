@@ -171,7 +171,7 @@ int init_SEIRSModel(SEIRSModel* model, const char* input_path){
         // Remove whitespace
         for(size_t ii=0, jj=0; ii<sizeof(line); ++ii){
             if(isspace(line[ii])) continue;
-            line[jj] = line[ii];
+            line[jj++] = line[ii];
             if(line[ii] == '\0') break;
         }
         // Read key and value

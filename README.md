@@ -42,20 +42,31 @@ $ fair registry install
 $ fair registry start
 ```
 
-Note the URL on which the server is running, which should be something like
-`http://127.0.0.1:8000`. Then, initialise the repository:
+Note the location of the registry token reported here. If using default settings, this
+should be at `/home/USERNAME/.fair/registry/token`. Then, initialise the repository:
 
-```
+```bash
 $ fair init
 ```
 
-The default inputs will work in most cases, but you may need to set the 'Remote API'
-using the URL reported by the previous command, i.e. `http://127.0.0.1:8000/api/`.
-You may also need to set the registry token, which should be at
-`/home/USERNAME/.fair/registry/token`, where `USERNAME` is your login name. Finally,
-run the model using:
+Finally, run the model using:
 
-```
+```bash
 $ fair pull data/config.yaml
 $ fair run data/config.yaml
+```
+
+If you don't have access to the remote server, a local run can be performed using:
+
+```bash
+$ fair pull --local data/config.yaml
+$ fair run --local data/config.yaml
+```
+
+You can also run in a dirty git repo using:
+
+```bash
+$ fair run --dirty data/config.yaml
+$ # Without remote server access:
+$ fair run --local --dirty data/config.yaml
 ```

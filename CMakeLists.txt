@@ -16,7 +16,7 @@ if(NOT fdpapi_FOUND)
     FetchContent_Declare(
         fdpapi
         GIT_REPOSITORY https://github.com/FAIRDataPipeline/cppDataPipeline.git
-        GIT_TAG main
+        GIT_TAG c_api
     )
     FetchContent_MakeAvailable(fdpapi)
 endif()

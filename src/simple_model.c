@@ -1,4 +1,5 @@
 #include <cSimpleModel/simple_model.h>
+#include <ctype.h>
 #include <string.h>
 #include <stdio.h>
 #include <sys/stat.h> // mkdir
@@ -44,16 +45,16 @@ void run_local(const char* input_path){
 
 void run_fair(){
     // Get token, config path, script path
-    fdp_log("Reading token", FDP_LOG_INFO);
+    fdp_log(FDP_LOG_INFO, "Reading token");
     char* token = getenv("FDP_LOCAL_TOKEN");
     if(token == NULL){
-        fdp_log("Error: Could not find env var FDP_LOCAL_TOKEN", FDP_LOG_ERROR);
+        fdp_log(FDP_LOG_ERROR, "Error: Could not find env var FDP_LOCAL_TOKEN");
         exit(EXIT_FAILURE);
     }
 
     char* fdp_path = getenv("FDP_CONFIG_DIR");
     if(fdp_path == NULL){
-        fdp_log("Error: Could not find env var FDP_CONFIG_DIR", FDP_LOG_ERROR);
+        fdp_log(FDP_LOG_ERROR, "Error: Could not find env var FDP_CONFIG_DIR");
         exit(EXIT_FAILURE);
     }
 
@@ -71,9 +72,9 @@ void run_fair(){
     sprintf(fdp_path_log, "%s: %s", "FDP Path", fdp_path);
     sprintf(config_path_log, "%s: %s", "Config Path", config_path);
     sprintf(script_path_log, "%s: %s", "Script Path", script_path);
-    fdp_log(fdp_path_log, FDP_LOG_INFO);
-    fdp_log(config_path_log, FDP_LOG_INFO);
-    fdp_log(script_path_log, FDP_LOG_INFO);
+    fdp_log(FDP_LOG_INFO, fdp_path_log);
+    fdp_log(FDP_LOG_INFO, config_path_log);
+    fdp_log(FDP_LOG_INFO, script_path_log);
 
     // Init FAIR datapipeline
     FDP_ERR_T err;
@@ -81,7 +82,7 @@ void run_fair(){
     if(err){
         char err_string[512];
         sprintf(err_string, "Error: fdp_init failed, error code %d", (int) err);
-        fdp_log(err_string, FDP_LOG_ERROR);
+        fdp_log(FDP_LOG_ERROR, err_string);
         exit(EXIT_FAILURE);
     }
 
@@ -91,7 +92,7 @@ void run_fair(){
     if(err){
         char err_string[512];
         sprintf(err_string, "Error: fdp_link_read failed, error code %d", (int) err);
-        fdp_log(err_string, FDP_LOG_ERROR);
+        fdp_log(FDP_LOG_ERROR, err_string);
         exit(EXIT_FAILURE);
     }
 
@@ -100,7 +101,7 @@ void run_fair(){
     if(err){
         char err_string[512];
         sprintf(err_string, "Error: fdp_link_write failed, error code %d", (int) err);
-        fdp_log(err_string, FDP_LOG_ERROR);
+        fdp_log(FDP_LOG_ERROR, err_string);
         exit(EXIT_FAILURE);
     }
     puts(output_path);
@@ -109,27 +110,27 @@ void run_fair(){
     SEIRSModel model;
 
 
-    fdp_log("Initialising SEIRS model", FDP_LOG_INFO);
+    fdp_log(FDP_LOG_INFO, "Initialising SEIRS model");
     err = init_SEIRSModel(&model, input_path);
     if(err){
-        fdp_log("Error: init_SEIRSModel failed", FDP_LOG_ERROR);
+        fdp_log(FDP_LOG_ERROR, "Error: init_SEIRSModel failed");
         exit(EXIT_FAILURE);
     }
 
 
-    fdp_log("Running SEIRS model", FDP_LOG_INFO);
+    fdp_log(FDP_LOG_INFO, "Running SEIRS model");
     run_SEIRSModel(&model);
 
 
     char csv_log_begin[512] = "Writing SEIRS model to csv ";
     strcpy(csv_log_begin + strlen(csv_log_begin), output_path);
-    fdp_log(csv_log_begin, FDP_LOG_INFO);
+    fdp_log(FDP_LOG_INFO, csv_log_begin);
 
     write_csv_SEIRSModel(&model, output_path);
 
     char csv_log_end[512] = "Successfully written SEIRS model to csv ";
     strcpy(csv_log_end + strlen(csv_log_end), output_path);
-    fdp_log(csv_log_end, FDP_LOG_INFO);
+    fdp_log(FDP_LOG_INFO, csv_log_end);
 
     finalise_SEIRSModel(&model);
 
@@ -137,7 +138,7 @@ void run_fair(){
     if(err){
         char err_string[512];
         sprintf(err_string, "Error: fdp_finalise failed, error code %d", (int) err);
-        fdp_log(err_string, FDP_LOG_ERROR);
+        fdp_log(FDP_LOG_ERROR, err_string);
         exit(EXIT_FAILURE);
     }
 }
@@ -169,12 +170,9 @@ int init_SEIRSModel(SEIRSModel* model, const char* input_path){
     while(fgets(line, sizeof(line), file)){
         // Remove whitespace
         for(size_t ii=0, jj=0; ii<sizeof(line); ++ii){
-            char c = line[ii];
-            if(c != ' ' && c != '\t' && line[ii] != '\n'){
-                line[jj] = c;
-                ++jj;
-            }
-            if(c == '\0') break;
+            if(isspace(line[ii])) continue;
+            line[jj] = line[ii];
+            if(line[ii] == '\0') break;
         }
         // Read key and value
         char key[64];

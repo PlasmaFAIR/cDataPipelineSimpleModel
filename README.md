@@ -1,6 +1,7 @@
 # cDataPipelineSimpleModel
 
-Simple SEIRS model for C API for the FAIR data pipeline.
+Simple SEIRS model for C API for the FAIR data pipeline. The C API is a component of
+the C++ API.
 
 ## Installation
 
@@ -18,6 +19,8 @@ on the user's system. Otherwise, `cDataPipeline` will be downloaded and built fi
 ## Run locally
 
 ```bash
+$ ./build/cSimpleModel data/local_data.csv
+$ # If the executable is not found here, try:
 $ ./build/bin/cSimpleModel data/local_data.csv
 ```
 

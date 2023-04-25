@@ -77,8 +77,9 @@ void run_fair(){
     fdp_log(FDP_LOG_INFO, script_path_log);
 
     // Init FAIR datapipeline
-    FDP_ERR_T err;
-    err = fdp_init(config_path, script_path, token);
+    FdpError err;
+    FdpDataPipeline* data_pipeline;
+    err = fdp_init(&data_pipeline, config_path, script_path, token);
     if(err){
         char err_string[512];
         sprintf(err_string, "Error: fdp_init failed, error code %d", (int) err);
@@ -88,7 +89,7 @@ void run_fair(){
 
     // Get/link IO paths
     char input_path[512];
-    err = fdp_link_read("SEIRS_model/parameters", input_path);
+    err = fdp_link_read(data_pipeline, "SEIRS_model/parameters", input_path);
     if(err){
         char err_string[512];
         sprintf(err_string, "Error: fdp_link_read failed, error code %d", (int) err);
@@ -97,7 +98,9 @@ void run_fair(){
     }
 
     char output_path[512];
-    err = fdp_link_write("SEIRS_model/results/model_output/c", output_path);
+    err = fdp_link_write(
+        data_pipeline, "SEIRS_model/results/model_output/c", output_path
+    );
     if(err){
         char err_string[512];
         sprintf(err_string, "Error: fdp_link_write failed, error code %d", (int) err);
@@ -134,7 +137,7 @@ void run_fair(){
 
     finalise_SEIRSModel(&model);
 
-    err = fdp_finalise();
+    err = fdp_finalise(&data_pipeline);
     if(err){
         char err_string[512];
         sprintf(err_string, "Error: fdp_finalise failed, error code %d", (int) err);

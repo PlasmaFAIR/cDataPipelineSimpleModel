@@ -5,9 +5,12 @@
 #include <sys/stat.h> // mkdir
 #include <sys/types.h>
 
+#define PATH_SIZE 1024
+#define LOG_BUFFER_SIZE 4096
+
 int main(int argc, char* argv[]){
-    char input_path[256];
-    char output_path[256];
+    char input_path[PATH_SIZE];
+    char output_path[PATH_SIZE];
     if(argc == 1){
         run_fair();
     } else if(argc == 2){
@@ -58,17 +61,17 @@ void run_fair(){
         exit(EXIT_FAILURE);
     }
 
-    char config_path[512];
+    char config_path[PATH_SIZE];
     strcpy(config_path, fdp_path);
     strcpy(config_path + strlen(config_path), "/config.yaml");
 
-    char script_path[512];
+    char script_path[PATH_SIZE];
     strcpy(script_path, fdp_path);
     strcpy(script_path + strlen(script_path), "/script.sh");
 
-    char fdp_path_log[1024];
-    char config_path_log[1024];
-    char script_path_log[1024];
+    char fdp_path_log[LOG_BUFFER_SIZE];
+    char config_path_log[LOG_BUFFER_SIZE];
+    char script_path_log[LOG_BUFFER_SIZE];
     sprintf(fdp_path_log, "%s: %s", "FDP Path", fdp_path);
     sprintf(config_path_log, "%s: %s", "Config Path", config_path);
     sprintf(script_path_log, "%s: %s", "Script Path", script_path);
@@ -81,28 +84,28 @@ void run_fair(){
     FdpDataPipeline* data_pipeline;
     err = fdp_init(&data_pipeline, config_path, script_path, token);
     if(err){
-        char err_string[512];
+        char err_string[LOG_BUFFER_SIZE];
         sprintf(err_string, "Error: fdp_init failed, error code %d", (int) err);
         fdp_log(FDP_LOG_ERROR, err_string);
         exit(EXIT_FAILURE);
     }
 
     // Get/link IO paths
-    char input_path[512];
-    err = fdp_link_read(data_pipeline, "SEIRS_model/parameters", input_path);
+    char input_path[PATH_SIZE];
+    err = fdp_link_read(data_pipeline, "SEIRS_model/parameters", input_path, PATH_SIZE);
     if(err){
-        char err_string[512];
+        char err_string[LOG_BUFFER_SIZE];
         sprintf(err_string, "Error: fdp_link_read failed, error code %d", (int) err);
         fdp_log(FDP_LOG_ERROR, err_string);
         exit(EXIT_FAILURE);
     }
 
-    char output_path[512];
+    char output_path[PATH_SIZE];
     err = fdp_link_write(
-        data_pipeline, "SEIRS_model/results/model_output/c", output_path
+        data_pipeline, "SEIRS_model/results/model_output/c", output_path, PATH_SIZE
     );
     if(err){
-        char err_string[512];
+        char err_string[LOG_BUFFER_SIZE];
         sprintf(err_string, "Error: fdp_link_write failed, error code %d", (int) err);
         fdp_log(FDP_LOG_ERROR, err_string);
         exit(EXIT_FAILURE);
@@ -125,13 +128,13 @@ void run_fair(){
     run_SEIRSModel(&model);
 
 
-    char csv_log_begin[512] = "Writing SEIRS model to csv ";
+    char csv_log_begin[LOG_BUFFER_SIZE] = "Writing SEIRS model to csv ";
     strcpy(csv_log_begin + strlen(csv_log_begin), output_path);
     fdp_log(FDP_LOG_INFO, csv_log_begin);
 
     write_csv_SEIRSModel(&model, output_path);
 
-    char csv_log_end[512] = "Successfully written SEIRS model to csv ";
+    char csv_log_end[LOG_BUFFER_SIZE] = "Successfully written SEIRS model to csv ";
     strcpy(csv_log_end + strlen(csv_log_end), output_path);
     fdp_log(FDP_LOG_INFO, csv_log_end);
 
@@ -139,7 +142,7 @@ void run_fair(){
 
     err = fdp_finalise(&data_pipeline);
     if(err){
-        char err_string[512];
+        char err_string[LOG_BUFFER_SIZE];
         sprintf(err_string, "Error: fdp_finalise failed, error code %d", (int) err);
         fdp_log(FDP_LOG_ERROR, err_string);
         exit(EXIT_FAILURE);

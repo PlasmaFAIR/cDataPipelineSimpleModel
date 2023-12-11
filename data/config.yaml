@@ -2,7 +2,7 @@ run_metadata:
   default_input_namespace: testing
   default_output_namespace: testing
   description: SEIRS Model C
-  script: ./build/cSimpleModel
+  script: ./build/bin/cSimpleModel
   remote_repo: https://github.com/PlasmaFAIR/cDataPipelineSimpleModel.git
 
 register:

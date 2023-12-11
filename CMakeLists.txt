@@ -9,14 +9,18 @@ include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 include(FetchContent)
 
-find_package(fdpapi QUIET)
-if(NOT fdpapi_FOUND)
-    FetchContent_Declare(
-        fdpapi
-        GIT_REPOSITORY https://github.com/FAIRDataPipeline/cppDataPipeline.git
-        GIT_TAG main
-    )
-    FetchContent_MakeAvailable(fdpapi)
+if(FDPAPI_NO_FETCHCONTENT)
+  find_package(fdpapi REQUIRED)
+else()
+  find_package(fdpapi QUIET)
+  if(NOT fdpapi_FOUND)
+      if(NOT DEFINED CPPDATAPIPELINEREF)
+          set(CPPDATAPIPELINEREF "heads/main")
+      endif()
+      set(FDPAPI_URL "https://github.com/FAIRDataPipeline/cppDataPipeline/archive/refs/${CPPDATAPIPELINEREF}.zip")
+      FetchContent_Declare(fdpapi URL ${FDPAPI_URL})
+      FetchContent_MakeAvailable(fdpapi)
+  endif()
 endif()
 
 
